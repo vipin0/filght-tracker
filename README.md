@@ -38,13 +38,13 @@ Usage:
 ## CLI Reference
   *By default the script show all the airplanes within the time interval of `7 days`.*
 
-  ### Changeing time interval
-    use -b/--begin or -e/--end for change time interval.
+  ### Changing time interval
+    use -b/--begin or -e/--end for changing time interval.
 
-  ### Arrival
+  ### Arrivals
     use -a or --arrival flag to list all the arriving airplanes.
 
-  ### Departure
+  ### Departures
     use -a or --arrival flag to list all the departing airplanes.
 
 
