@@ -40,12 +40,35 @@ Usage:
 
   ### Changing time interval
     use -b/--begin or -e/--end for changing time interval.
+  
+  **Example**
+  ```
+  $ python flight-tracker.py -a "charan singh" -b "2021-10-30 12:00:00" -e "2021-11-02 12:00:00"
+  
+  or
+  
+  $ python flight-tracker.py -a "charan singh" --begin "2021-10-30 12:00:00" --end "2021-11-02 12:00:00"
+
+
+  ```
 
   ### Arrivals
     use -a or --arrival flag to list all the arriving airplanes.
+  
+  **Example**
+
+  ```
+  $ python flight-tracker.py -a "charan singh"
+  ```
 
   ### Departures
     use -a or --arrival flag to list all the departing airplanes.
+  
+  **Example**
+
+  ```
+  $ python flight-tracker.py -d "charan singh"
+  ```
 
 
 ## Dependencies
