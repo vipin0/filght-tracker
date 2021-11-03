@@ -6,16 +6,19 @@ any airport in the world.
 
 import click
 import requests
-from utils.date import DateTimeConversion
 from datetime import datetime, timedelta
 from tabulate import tabulate
 
+from utils.date import DateTimeConversion
+
 class FlightTracker(DateTimeConversion):
+    """This class provide all the functionalities for the FlightTracker.
+    """
     
     def __init__(self) -> None:
         self.BASE_URL = "https://opensky-network.org/api"
 
-    def __get_flights(self,query_type,airport,begin=datetime.now()-timedelta(7),end=datetime.now()):
+    def __get_flights(self,query_type,airport,begin:datetime,end:datetime):
         begin = self.datetime_to_unix(begin)
         end = self.datetime_to_unix(end)
         url = f"{self.BASE_URL}/flights/{query_type}?airport={airport}&begin={begin}&end={end}"
@@ -42,34 +45,30 @@ class FlightTracker(DateTimeConversion):
         return flightdetails
 
     def print_flights(self,flightdetails):
+        print("*"*65)
+        print("Flight Details".center(65),end="\n")
+        print("*"*65)
         print("\n\n",tabulate(flightdetails,headers="firstrow"))
 
 
+@click.command()
+@click.argument("ICAOCODE")
+@click.option('-a', '--arrival',is_flag=True,help="list the arriving airplanes to the given airport.")
+@click.option('-d', '--depart',is_flag=True,help="list the depaturting airplanes from the given airport.")
+# @click.option('-b', '--begin',type=click.DateTime(formats=["%Y-%m-%d %H:%M:%S"])
+#             ,help="starting time in YYYY-mm-dd HH:MM")
+# @click.option('-e', '--end',type=click.DateTime(formats=["%Y-%m-%d %H:%M:%S"]),
+#             help="ending time in YYYY-mm-dd HH:MM")
+def main(icaocode,arrival,depart):
+    # print(f"{arrival}\n{depart}\n{begin}\n{end}")
 
-f = FlightTracker()
-res = f.get_arrivals("VILK")
-f.print_flights(res)
+    f = FlightTracker()
+    if arrival:
+        result = f.get_arrivals(icaocode)
+        f.print_flights(result)
+    elif depart:
+        result = f.get_departures(icaocode)
+        f.print_flights(result)
 
-# res = f.get_departures("VILK")
-# f.print_flights(res)
-
-# print(res)
-
-
-
-
-
-# def get_arrivals():
-#     pass
-
-# @click.command()
-# @click.argument("ICAO CODE")
-# @click.option('-a', '--arival',is_flag=True,help="to list the arivals")
-# @click.option('-d', '--depart',is_flag=True,help="to list the depatures")
-# @click.option('-b', '--begin',type=str,help="starting time")
-# @click.option('-e', '--end',is_flag=True,help="ending time")
-# def main():
-#     pass
-
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
