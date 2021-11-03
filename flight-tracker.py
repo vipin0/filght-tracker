@@ -3,7 +3,7 @@ list arrival and departure information for
 any airport in the world.
 
 """
-
+import sys
 import click
 import requests
 from datetime import datetime, timedelta
@@ -23,6 +23,7 @@ class FlightTracker(DateTimeConversion):
         end = self.datetime_to_unix(end)
         url = f"{self.BASE_URL}/flights/{query_type}?airport={airport}&begin={begin}&end={end}"
         response = requests.get(url)
+        # print(response.status_code)
         # print(response.text)
         result = response.json()
         # print(result[0])
@@ -55,19 +56,47 @@ class FlightTracker(DateTimeConversion):
 @click.argument("ICAOCODE")
 @click.option('-a', '--arrival',is_flag=True,help="list the arriving airplanes to the given airport.")
 @click.option('-d', '--depart',is_flag=True,help="list the depaturting airplanes from the given airport.")
-# @click.option('-b', '--begin',type=click.DateTime(formats=["%Y-%m-%d %H:%M:%S"])
-#             ,help="starting time in YYYY-mm-dd HH:MM")
-# @click.option('-e', '--end',type=click.DateTime(formats=["%Y-%m-%d %H:%M:%S"]),
-#             help="ending time in YYYY-mm-dd HH:MM")
-def main(icaocode,arrival,depart):
+@click.option('-b', '--begin',type=click.DateTime(formats=["%Y-%m-%d %H:%M:%S"])
+            ,help="starting time in Y-m-d H:M:S")
+@click.option('-e', '--end',type=click.DateTime(formats=["%Y-%m-%d %H:%M:%S"]),
+            help="ending time in Y-m-d H:M:S")
+
+def main(icaocode,arrival,depart,begin,end):
     # print(f"{arrival}\n{depart}\n{begin}\n{end}")
 
     f = FlightTracker()
     if arrival:
-        result = f.get_arrivals(icaocode)
+        result = None
+        if begin and end:
+            if begin + timedelta(7) > end:
+                print("Time interval must be less than 7 days.",file=sys.stderr)
+                sys.exit(1)
+            result = f.get_arrivals(icaocode,begin,end)
+        elif begin:
+            end = begin+timedelta(7)
+            result = f.get_arrivals(icaocode,begin=begin,end=end)
+        elif end:
+            begin = end-timedelta(7)
+            result = f.get_arrivals(icaocode,begin=begin,end=end)
+        else:
+            result = f.get_arrivals(icaocode)
         f.print_flights(result)
+    
     elif depart:
-        result = f.get_departures(icaocode)
+        result = None
+        if begin and end:
+            if begin + timedelta(7) > end:
+                print("Time interval must be less than 7 days.",file=sys.stderr)
+                sys.exit(1)
+            result = f.get_departures(icaocode,begin,end)
+        elif begin:
+            end = begin+timedelta(7)
+            result = f.get_departures(icaocode,begin=begin,end=end)
+        elif end:
+            begin = end-timedelta(7)
+            result = f.get_departures(icaocode,begin=begin,end=end)
+        else:
+            result = f.get_departures(icaocode)
         f.print_flights(result)
 
 if __name__ == "__main__":
