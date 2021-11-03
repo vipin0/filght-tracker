@@ -12,16 +12,17 @@ todo
 ## Usage
 
 ```
-Usage:
+Usage: python flight-tracker.py [OPTIONS] ICAOCODE
 
-    $ python test-click.py [OPTIONS] AIRPORT
-
-    Options:
-    -a, --arival      to list the arivals.
-    -d, --depart      to list the depatures.
-    -b, --begin TIME  starting time.
-    -e, --end TIME    ending time.
-    --help            Show this message and exit.
+Options:
+  -a, --arrival                   list the arriving airplanes to the given
+                                  airport.
+  -d, --depart                    list the depaturting airplanes from the
+                                  given airport.
+  -b, --begin [%Y-%m-%d %H:%M:%S]
+                                  starting time in Y-m-d H:M:S
+  -e, --end [%Y-%m-%d %H:%M:%S]   ending time in Y-m-d H:M:S
+  --help                          Show this message and exit.
 
 ```
 
