@@ -26,8 +26,16 @@ Usage:
 ```
 
 ## Dependencies
-This project is uses the following dependencies.
+This project is uses the following third-party dependencies.
 ```
 requests
 click
+tabulate
 ```
+
+## Sample outputs
+ #### Arrivals
+ <img src="images/arrival.PNG"/><br>
+ 
+ #### Departures
+ <img src="images/depart.PNG"/>
