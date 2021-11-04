@@ -101,7 +101,7 @@ def main(airport_name_or_city_name,arrival,depart,begin,end):
     if arrival:
         result = None
         if begin and end:
-            if begin + timedelta(7) > end:
+            if end - begin > timedelta(7):
                 print("Time interval must be less than 7 days.",file=sys.stderr)
                 sys.exit(1)
             result = f.get_arrivals(icaocode,begin,end)
@@ -118,7 +118,7 @@ def main(airport_name_or_city_name,arrival,depart,begin,end):
     elif depart:
         result = None
         if begin and end:
-            if begin + timedelta(7) > end:
+            if end - begin > timedelta(7):
                 print("Time interval must be less than 7 days.",file=sys.stderr)
                 sys.exit(1)
             result = f.get_departures(icaocode,begin,end)
