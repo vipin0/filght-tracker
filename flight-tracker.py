@@ -63,6 +63,22 @@ class FlightTracker(DateTimeConversion):
         print("\n",tabulate(flightdetails,headers="firstrow"))
 
 
+def get_airport_details(airport_name_or_city_name):
+    """utility function to resolve airport detail"""
+    details = get_airport_detail(airport_name_or_city_name)
+    if len(details) == 0:
+        print("No airport code found with given name. Try a finer search!!",file=sys.stderr)
+        sys.exit(1)
+    elif len(details) != 1:
+        print("Multiple airport codes found with given name. Try a finer search!!",file=sys.stderr)
+        sys.exit(1)
+    else:
+        icaocode = details[0]["icao"]
+        name = details[0]["name"]
+        city = details[0]["city"] 
+        ap_detail = f"{name}, {city} - ICAO : {icaocode}"
+    return (icaocode,ap_detail)
+
 @click.command()
 @click.argument("airport_name_or_city_name")
 @click.option('-a', '--arrival',is_flag=True,help="list the arriving airplanes to the given airport.")
@@ -76,19 +92,11 @@ def main(airport_name_or_city_name,arrival,depart,begin,end):
     """main method of the script."""
     # print(f"{arrival}\n{depart}\n{begin}\n{end}")
 
-    details = get_airport_detail(airport_name_or_city_name)
-    if len(details) == 0:
-        print("No airport code found with given name. Try a finer search!!",file=sys.stderr)
-        sys.exit(1)
-    elif len(details) != 1:
-        print("Multiple airport codes found with given name. Try a finer search!!",file=sys.stderr)
-        sys.exit(1)
-    else:
-        icaocode = details[0]["icao"]
-        name = details[0]["name"]
-        city = details[0]["city"] 
-        ap_detail = f"{name}, {city} - ICAO : {icaocode}"
+    if not arrival and not depart:
+        arrival=True
 
+    icaocode,ap_detail = get_airport_details(airport_name_or_city_name)
+    
     f = FlightTracker()
     if arrival:
         result = None
