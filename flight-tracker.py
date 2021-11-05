@@ -19,17 +19,24 @@ class FlightTracker(DateTimeConversion):
     def __init__(self) -> None:
         self.BASE_URL = "https://opensky-network.org/api"
 
+
     def __get_flights(self,query_type,airport,begin:datetime,end:datetime):
         """This method gets all the flights for the given query and time interval.
         """
         begin = self.datetime_to_unix(begin)
         end = self.datetime_to_unix(end)
         url = f"{self.BASE_URL}/flights/{query_type}?airport={airport}&begin={begin}&end={end}"
-        response = requests.get(url)
-        # print(response.status_code)
-        # print(response.text)
+        
+        try:
+            response = requests.get(url)
+        except ConnectionError:
+            print("Connection Error!! Please check you connection.",file=sys.stderr)
+            sys.exit(1)
+        except Exception:
+            print("Something went wrong!!",file=sys.stderr)
+            sys.exit(1)
+
         result = response.json()
-        # print(result[0])
         time_var = "lastSeen"
         if query_type == "departure":
             time_var = "firstSeen"
@@ -65,21 +72,34 @@ class FlightTracker(DateTimeConversion):
         print("\n",tabulate(flightdetails,headers="firstrow"))
 
 
-def get_airport_details(airport_name_or_city_name):
-    """utility function to resolve airport detail"""
-    details = get_airport_detail(airport_name_or_city_name)
-    if len(details) == 0:
-        print("No airport code found with given name. Try a finer search!!",file=sys.stderr)
-        sys.exit(1)
-    elif len(details) != 1:
-        print("Multiple airport codes found with given name. Try a finer search!!",file=sys.stderr)
-        sys.exit(1)
+
+############################# main handler function ###################################
+
+def handle_arrival_depart_call(function_name,icaocode,begin,end):
+    """This is the main handler function which accept a function_name
+        will be called using the other arguments.
+
+    """
+
+    result = None
+    if begin and end:
+        if end - begin > timedelta(7):
+            print("Time interval must be less than 7 days.",file=sys.stderr)
+            sys.exit(1)
+        result = function_name(icaocode,begin,end)
+    elif begin:
+        end = begin+timedelta(7)
+        result = function_name(icaocode,begin=begin,end=end)
+    elif end:
+        begin = end-timedelta(7)
+        result = function_name(icaocode,begin=begin,end=end)
     else:
-        icaocode = details[0]["icao"]
-        name = details[0]["name"]
-        city = details[0]["city"] 
-        ap_detail = f"{name}, {city} - ICAO : {icaocode}"
-    return (icaocode,ap_detail)
+        result = function_name(icaocode)
+    # f.print_flights(result,ap_detail)
+    return result
+
+########################################################################################
+
 
 @click.command()
 @click.argument("airport_name_or_city_name")
@@ -97,42 +117,15 @@ def main(airport_name_or_city_name,arrival,depart,begin,end):
     if not arrival and not depart:
         arrival=True
 
-    icaocode,ap_detail = get_airport_details(airport_name_or_city_name)
+    icaocode,ap_detail = get_airport_detail(airport_name_or_city_name)
     
     f = FlightTracker()
     
     if arrival:
-        result = None
-        if begin and end:
-            if end - begin > timedelta(7):
-                print("Time interval must be less than 7 days.",file=sys.stderr)
-                sys.exit(1)
-            result = f.get_arrivals(icaocode,begin,end)
-        elif begin:
-            end = begin+timedelta(7)
-            result = f.get_arrivals(icaocode,begin=begin,end=end)
-        elif end:
-            begin = end-timedelta(7)
-            result = f.get_arrivals(icaocode,begin=begin,end=end)
-        else:
-            result = f.get_arrivals(icaocode)
+        result = handle_arrival_depart_call(f.get_arrivals,icaocode,begin,end)
         f.print_flights(result,ap_detail)
-    
     elif depart:
-        result = None
-        if begin and end:
-            if end - begin > timedelta(7):
-                print("Time interval must be less than 7 days.",file=sys.stderr)
-                sys.exit(1)
-            result = f.get_departures(icaocode,begin,end)
-        elif begin:
-            end = begin+timedelta(7)
-            result = f.get_departures(icaocode,begin=begin,end=end)
-        elif end:
-            begin = end-timedelta(7)
-            result = f.get_departures(icaocode,begin=begin,end=end)
-        else:
-            result = f.get_departures(icaocode)
+        result = handle_arrival_depart_call(f.get_departures,icaocode,begin,end)
         f.print_flights(result,ap_detail)
 
 if __name__ == "__main__":
