@@ -38,7 +38,8 @@ class FlightTracker(DateTimeConversion):
         return flightdetails
 
     def get_arrivals(self,airport,begin=datetime.now()-timedelta(7),end=datetime.now()):
-        """This method gets all the arriving flights for the given query and time interval.
+        """This method gets all the arriving flights for the given query and time
+         interval by calling get_flights() method.
         """
         flightdetails = [["Flight No.","Departed From","Coming to","ETA"]]
 
@@ -47,14 +48,15 @@ class FlightTracker(DateTimeConversion):
         return flightdetails
 
     def get_departures(self,airport,begin=datetime.now()-timedelta(7),end=datetime.now()):
-        """This method gets all the departing flights for the given query and time interval.
+        """This method gets all the departing flights for the given query and time 
+        interval by calling get_flights() method.
         """
         flightdetails = [["Flight No.","Departed From","Going To","ETD"]]
         flightdetails += self.__get_flights("departure",airport=airport,begin=begin,end=end)
         return flightdetails
 
     def print_flights(self,flightdetails,ap_detail):
-        """This method gets print all the flights for the given query and time interval.
+        """This method gets print all the flights in the table format.
         """
         print("*"*65)
         print("Flight Details".center(65),end="\n\n")
@@ -98,6 +100,7 @@ def main(airport_name_or_city_name,arrival,depart,begin,end):
     icaocode,ap_detail = get_airport_details(airport_name_or_city_name)
     
     f = FlightTracker()
+    
     if arrival:
         result = None
         if begin and end:
