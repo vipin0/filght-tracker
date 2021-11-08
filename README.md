@@ -23,7 +23,7 @@ pip install -r requirements.txt
 ```
 3. Run it as a command-line application.
 ```
-python flight-tracker.py -a 'LKO'
+python flight_tracker.py -a 'LKO'
 ```
 <hr>
 
@@ -80,7 +80,7 @@ python slack_bot.py
  ```
 Usage: 
 
-  $ python flight-tracker.py [OPTIONS] AIRPORT_CODE
+  $ python flight_tracker.py [OPTIONS] AIRPORT_CODE
 
   Options:
   -a, --arrival           list the arriving airplanes to the given airport.
@@ -101,11 +101,11 @@ Usage:
   
   *Example*
   ```
-  $ python flight-tracker.py -a LKO -b 2021-10-30 -e 2021-11-02
+  $ python flight_tracker.py -a LKO -b 2021-10-30 -e 2021-11-02
   
   or
   
-  $ python flight-tracker.py -a LKO --begin 2021-10-30 --end 2021-11-02
+  $ python flight_tracker.py -a LKO --begin 2021-10-30 --end 2021-11-02
 
 
   ```
@@ -117,7 +117,7 @@ Usage:
   *Example*
 
   ```
-  $ python flight-tracker.py -a LKO
+  $ python flight_tracker.py -a LKO
   ```
 
   **Departures**
@@ -127,7 +127,7 @@ Usage:
   *Example*
 
   ```
-  $ python flight-tracker.py -d LKO
+  $ python flight_tracker.py -d LKO
   ```
 
 ## Dependencies
