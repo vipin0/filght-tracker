@@ -10,6 +10,7 @@ from slackeventsapi import SlackEventAdapter
 from utils.flights import parse_query, parse_tracking_query
 
 
+
 load_dotenv()
 
 
