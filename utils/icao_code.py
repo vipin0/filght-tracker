@@ -2,37 +2,36 @@
 
 """
 import json
-import sys
+from pathlib import Path
 
-FILE_NAME = "utils/airports.json"
-
+FILE_NAME = Path(__file__).parent/"airports.json"
 
 def resolve_airport_detail(query:str):
     """This method accept the query and return the icao code and airport detail.
     """
-    # print(query)
+    # print("query:",query)
+    # print(FILE_NAME)
     result = []
     airports_data = json.loads(open(FILE_NAME).read())
     for data in airports_data:
         # print(data)
-        if query.lower() in data["name"].lower() or query.lower() in data["city"].lower():
+        if query.lower() == data["iata_code"].lower():
             result.append(data)
-    return result
+            # print(data)
+            return data
+    return {}
 
 
-def get_airport_detail(airport_name_or_city_name):
+def get_airport_detail(airport_code):
     """utility function to resolve airport detail"""
-    details = resolve_airport_detail(airport_name_or_city_name)
-    if len(details) == 0:
-        print("No airport code found with given name. Try a finer search!!",file=sys.stderr)
-        sys.exit(1)
-    elif len(details) != 1:
-        print("Multiple airport codes found with given name. Try a finer search!!",file=sys.stderr)
-        sys.exit(1)
+    details = resolve_airport_detail(airport_code)
+    # print(details)
+    if details == {}:
+        return None
     else:
-        icaocode = details[0]["icao"]
-        name = details[0]["name"]
-        city = details[0]["city"] 
+        icaocode = details["icao_code"]
+        name = details["name"]
+        city = details["city"] 
         ap_detail = f"{name}, {city} - ICAO : {icaocode}"
-    return (icaocode,ap_detail)
+        return (icaocode,ap_detail)
 
