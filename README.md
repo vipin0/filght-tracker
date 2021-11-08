@@ -2,7 +2,6 @@
 
 
 ## Project Description
-<hr>
 
 It is a command-line utility and slack bot developed in python where user can either run it using command line or can run */slash commands* by deploying it. This project uses [OpenSky REST API](https://opensky-network.org/apidoc/rest.html) and Paytm Flight API.
 
@@ -10,7 +9,6 @@ It is a command-line utility and slack bot developed in python where user can ei
 
 ## Installation
 
-<hr>
 
 - ### Command-line
 
@@ -52,7 +50,6 @@ python slack_bot.py
 ```
 ## Usage
 
-<hr>
 
 - ## For Slack_Bot
 #### Available /[slash]commands
