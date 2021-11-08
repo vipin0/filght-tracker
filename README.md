@@ -33,7 +33,6 @@ python flight_tracker.py -a 'LKO'
 ```
 git clone https://github.com/vipin0/filght-tracker.git
 ```
-  
 2. Install the required dependencies.
 ```
 pip install -r requirements.txt
@@ -48,6 +47,7 @@ PORT=4444
 ```
 python slack_bot.py
 ```
+
 ## Usage
 
 
