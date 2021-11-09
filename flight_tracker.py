@@ -44,7 +44,7 @@ class FlightTracker(DateTimeConversion):
                              for f in result if f["estDepartureAirport"] and f["estArrivalAirport"]]
         return flightdetails
 
-    def get_arrivals(self,airport,begin=datetime.now()-timedelta(7),end=datetime.now()):
+    def get_arrivals(self,airport,begin=datetime.now()-timedelta(1),end=datetime.now()):
         """This method gets all the arriving flights for the given query and time
          interval by calling get_flights() method.
         """
@@ -54,7 +54,7 @@ class FlightTracker(DateTimeConversion):
         
         return flightdetails
 
-    def get_departures(self,airport,begin=datetime.now()-timedelta(7),end=datetime.now()):
+    def get_departures(self,airport,begin=datetime.now()-timedelta(1),end=datetime.now()):
         """This method gets all the departing flights for the given query and time 
         interval by calling get_flights() method.
         """
@@ -91,10 +91,10 @@ def handle_arrival_depart_call(function_name,icaocode,begin=None,end=None):
             sys.exit(1)
         result = function_name(icaocode,begin,end)
     elif begin:
-        end = begin+timedelta(7)
+        end = begin+timedelta(1)
         result = function_name(icaocode,begin=begin,end=end)
     elif end:
-        begin = end-timedelta(7)
+        begin = end-timedelta(1)
         result = function_name(icaocode,begin=begin,end=end)
     else:
         result = function_name(icaocode)
