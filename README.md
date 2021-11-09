@@ -93,7 +93,7 @@ Usage:
 ```
 
 ## CLI Reference
-  *By default the script show all the airplanes within the time interval of `7 days`.*
+  *By default the script show all the airplanes within the time interval of `last 24 hours`.*
 
   **Changing time interval**
   
