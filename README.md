@@ -141,13 +141,21 @@ click
 tabulate
 ```
 
+## Testcases
+To run the testcases run the following.
+```
+pytest test_flight.py
+```
 
 ## Sample outputs
  #### Arrivals
  <img src="images/arrival.PNG"/><br>
  
  #### Departures
- <img src="images/depart.PNG"/>
+ <img src="images/depart.PNG"/><br>
+
+ #### Testcase
+ <img src="images/tests.PNG"/>
 
 
 
